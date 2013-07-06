@@ -1,0 +1,104 @@
+Options +FollowSymLinks
+ErrorDocument 404 /404-error/
+RewriteEngine on
+
+
+RewriteBase /aurora_wowfan/
+
+RewriteRule clanky/(.*)/(.*)/ index.php?presenter=article&link=$1&page=$2
+
+
+
+RewriteRule cataclysm-info/(.*)/(.*)/ index.php?clanek=$1&stranka=$2&cataclysm=1
+RewriteRule novinky/(.*)/(.*)/ index.php?novinka=$1&stranka=$2
+RewriteRule user-texty/(.*)/(.*)/ index.php?usertext=$1&stranka=$2
+RewriteRule uvod/ index.php
+RewriteRule odhlaseni/ index.php?odhlas=TRUE
+RewriteRule smazat-komentar/(.*)/ index.php?smaz_komentar=$1
+RewriteRule smazat-komentar-novinka/(.*)/ index.php?smaz_komentar=$1
+RewriteRule smazat-komentar-user-text/(.*)/ index.php?smaz_komentar=$1
+RewriteRule banuj/(.*)/(.*)/ index.php?akce=ban&koho=$1&nick=$2
+RewriteRule prihlaseni/ index.php?akce=login
+RewriteRule aktivovano/ index.php?akce=login&aktivovano=true
+RewriteRule prihlaseni-ne/ index.php?akce=login&ne=true
+RewriteRule prihlaseni-wrong/ index.php?akce=login&wrong=true
+RewriteRule prihlaseni-ban/(.*)/ index.php?akce=login&ban=$1
+RewriteRule registrovat/ index.php?akce=registrace
+RewriteRule administrace/pridat-clanek/ index.php?akce=pridat_clanek
+RewriteRule administrace/pridat-novinku/ index.php?akce=pridat_novinku
+RewriteRule pridat-user-text/ index.php?akce=pridat_user_text
+RewriteRule administrace/hlavni-administrace/ index.php?akce=administrace
+RewriteRule administrace/upravit-odkaz/(.*)/ index.php?akce=administrace&odkaz=$1
+RewriteRule administrace/smazat-odkaz/(.*)/ index.php?akce=administrace&smazat_odkaz=$1
+RewriteRule administrace/upravit-kategorii/(.*)/ index.php?akce=administrace&upravit_kategorii=$1
+RewriteRule administrace/smazat-kategorii/(.*)/ index.php?akce=administrace&smazat_kategorii=$1
+RewriteRule administrace/reklama/ index.php?akce=reklama
+RewriteRule profily/(.*)/ index.php?akce=profil&nick=$1
+RewriteRule upravit-profil/(.*)/ index.php?akce=profil&nick=$1&action=upravit
+RewriteRule prehled-clanku/(.*)/(.*)/ index.php?akce=autor&nick=$1&stranka=$2
+RewriteRule prehled-user-textu/(.*)/(.*)/ index.php?akce=autor&nick_usertext=$1&stranka=$2
+RewriteRule prehled-novinek/(.*)/(.*)/ index.php?akce=autor&nick_novinka=$1&stranka=$2
+RewriteRule smazani/(.*)/(.*)/ index.php?akce=smazat&link_smazat=$1&id=$2
+RewriteRule smazani-novinka/(.*)/(.*)/ index.php?akce=smazat&link_smazat=$1&id=$2
+RewriteRule smazani-user-text/(.*)/(.*)/ index.php?akce=smazat&link_smazat=$1&id=$2
+RewriteRule upraveni/(.*)/ index.php?akce=upravit_clanek&clanek=$1
+RewriteRule upraveni-novinky/(.*)/ index.php?akce=upravit_novinku&novinka=$1
+RewriteRule upraveni-user-textu/(.*)/ index.php?akce=upravit_usertext&usertext=$1
+RewriteRule news-novinky/(.*)/ index.php?novinky=$1
+RewriteRule user-texts/(.*)/ index.php?usertexty=$1
+RewriteRule seznam-clanku/(.*)/ index.php?seznam-clanku=$1
+RewriteRule ohodnotit-clanek/(.*)/(.*)/ index.php?hodnotit-clanek=$1&hodnoceni=$2
+RewriteRule ohodnotit-usertext/(.*)/(.*)/ index.php?hodnotit-usertext=$1&hodnoceni=$2
+RewriteRule ohodnotit-novinka/(.*)/(.*)/ index.php?hodnotit-novinka=$1&hodnoceni=$2
+RewriteRule hledat/(.*)/(.*)/ index.php?hledane=$1&strana=$2
+RewriteRule clanky-rss/ rss/clanky.php
+RewriteRule user-texty-rss/ rss/usertexty.php
+RewriteRule novinky-rss/ rss/novinky.php
+RewriteRule upload/ upload.php
+RewriteRule rss-feed/ index.php?akce=rss
+RewriteRule administrace-shoutu/ index.php?akce=shout
+RewriteRule unban/(.*)/ index.php?akce=shout&id=$1
+RewriteRule shout-smazat/(.*)/ index.php?akce=shout&id_smazat=$1
+RewriteRule vyber-loga/ index.php?akce=vyber-loga
+RewriteRule 404-error/ index.php?akce=404
+RewriteRule seznam-uzivatelu/(.*)/ index.php?akce=uzivatele&strana=$1
+RewriteRule nejkomentovanejsi/(.*)/ index.php?akce=nejkomentovanejsi&strana=$1
+RewriteRule nejlepe-hodnocene/(.*)/ index.php?akce=nejlepe-hodnocene&strana=$1
+RewriteRule posledni-komentare/(.*)/ index.php?akce=posledni-komentare&strana=$1
+RewriteRule povysit-usertext/(.*)/ index.php?povysit_usertext=$1
+RewriteRule nahlasit/(.*)/ index.php?nahlasit=$1
+RewriteRule napomenout/(.*)/(.*)/ index.php?napomenout=$1&id=$2
+RewriteRule snizit-napomenuti/(.*)/ index.php?snizit-napomenuti=$1
+RewriteRule hlasovat-anketa/(.*)/(.*)/ includes/poll/poll.php?hlasovat=$1&moznost=$2
+
+RewriteRule redaktori/index/ index.php?akce=redaktori
+RewriteRule redaktori/poslat-zpravu/ index.php?akce=redaktori-poslat-zpravu
+RewriteRule redaktori/poslat-zpravu/(.*)/ index.php?akce=redaktori-poslat-zpravu&nick=$1
+RewriteRule redaktori/prijate-zpravy/(.*)/ index.php?akce=redaktori-prijate-zpravy&strana=$1
+RewriteRule redaktori/zprava/(.*)/ index.php?akce=redaktori-zprava&id=$1
+RewriteRule redaktori/ukoly/ index.php?akce=redaktori-ukoly
+RewriteRule redaktori/prijmout-ukol/(.*)/ index.php?akce=redaktori-ukoly&prijmout=$1
+RewriteRule redaktori/administrace-ukoly/(.*)/ index.php?akce=redaktori-administrace-ukoly&strana=$1
+RewriteRule redaktori/odpovedet/(.*)/ index.php?akce=redaktori-poslat-zpravu&nick=$1&odpovedet
+RewriteRule redaktori/oznacit-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&oznacit=$1
+RewriteRule redaktori/odznacit-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&odznacit=$1
+RewriteRule redaktori/smazat-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&smazat=$1
+RewriteRule redaktori/upravit-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&upravit=$1
+RewriteRule redaktori/pridat-praci/ index.php?akce=redaktori-pridat-praci
+RewriteRule redaktori/prace/ index.php?akce=redaktori-prace
+RewriteRule redaktori/oznacit-praci/(.*)/ index.php?akce=redaktori-prace&hotovo=$1
+RewriteRule redaktori/shout/(.*)/ index.php?akce=redaktori-shout&strana=$1
+RewriteRule redaktori/statistiky/(.*)/ index.php?akce=redaktori-statistiky&strana=$1
+RewriteRule redaktori/obrazky/(.*)/ index.php?akce=redaktori-obrazky&strana=$1
+RewriteRule redaktori/ankety/ index.php?akce=redaktori-ankety
+RewriteRule redaktori/zobrazit-anketu/(.*)/ index.php?akce=redaktori-zobrazit-anketu&id=$1
+RewriteRule redaktori/napomenuti/(.*)/ index.php?akce=redaktori-napomenuti&strana=$1
+RewriteRule redaktori/nahlasene/(.*)/ index.php?akce=redaktori-nahlasene&strana=$1
+RewriteRule redaktori/cant-miss/ index.php?akce=redaktori-cant-miss
+RewriteRule redaktori/skryt-obrazek/(.*)/ index.php?akce=redaktori-skryt-obrazek&id=$1
+RewriteRule redaktori/obrazek-dolu/(.*)/ index.php?akce=redaktori-obrazek-dolu&id=$1
+RewriteRule redaktori/obrazek-nahoru/(.*)/ index.php?akce=redaktori-obrazek-nahoru&id=$1
+RewriteRule redaktori/zobrazit-obrazek/(.*)/ index.php?akce=redaktori-zobrazit-obrazek&id=$1
+RewriteRule sitemap.xml sitemap.php
+RewriteRule topeni-bacovsky.cz/(.*) http://www.topeni-bacovsky.cz/$1 [R=301,L]
+RewriteRule topeni-bacovsky.cz http://www.topeni-bacovsky.cz/ [R=301,L]
