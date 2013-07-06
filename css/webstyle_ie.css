@@ -1,0 +1,9 @@
+/* Internet Explorer hack */
+
+div.submenu {
+  line-height: 13px !important;  
+}   
+
+img.menusep {
+  margin-bottom: 3px;  
+}         
