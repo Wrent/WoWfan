@@ -1,0 +1,353 @@
+<?php
+header('Content-Type: text/html; charset=utf-8');
+require 'includes/mysql_connection.php';
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="verify-v1" content="7cBWUOJyVAwvsejKe3o+LPZ+GOj2pcgZMRAIZdecgZU=">
+        <meta name="robots" content="all,follow">
+        <meta name="description" content="">
+        <meta name="keywords" content=""> 
+        <meta name="author" content="Adam Kučera - Wrent - adam.kucera@wrent.cz">
+        <meta property="og:title" content="">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="">
+        <meta property="fb:admins" content="Wrent00">
+        <meta property="fb:page_id" content="173034656044146">
+        <title></title>   
+        <link rel="shortcut icon" href="">
+
+        <!--[if IE 7]> <link rel="stylesheet" href="css/webstyle_ie.css" 
+        type="text/css"> <![endif]--> <!--[if IE 8]> <link rel="stylesheet" 
+        href="css/webstyle_ie.css" type="text/css"> <![endif]--> <!--[if IE 9]> <link 
+        rel="stylesheet" href="css/webstyle_ie.css" type="text/css"> <![endif]--> 
+        <!--[if IE 10]> <link rel="stylesheet" href="css/webstyle_ie.css" 
+        type="text/css"> <![endif]--> <link rel="stylesheet" href="css/webstyle.css" 
+        type="text/css"> <script type="text/javascript" src="js/jquery-1.7.1.min.js">
+        </script> <script type="text/javascript" src="js/web.js"></script> <script 
+            src="http://static.wowhead.com/widgets/power.js" type="text/javascript">
+        </script> <!-- (C)2000-2010 Gemius SA - gemiusAudience / tiscali.cz / Games.cz 
+        --> <script type="text/javascript"> <!--//--><![CDATA[//><!-- var 
+            pp_gemius_identifier = new 
+            String('150w26rnUw7lSXdAkpCE9sewrmdYk87C_iQd9ycBZYj.S7'); //--><!]]> </script> 
+        <script type="text/javascript" 
+        src="http://www.tiscali.cz/tiscali/js/xgemius.js"></script> <script 
+            type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 
+                'UA-5909592-1']); _gaq.push(['_trackPageview']); // Second tracker 
+            _gaq.push(['secondTracker._setAccount','UA-21694383-1']); 
+            _gaq.push(['secondTracker._setDomainName', '.tiscali.cz']); 
+            _gaq.push(['secondTracker._trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </head>
+    <body>
+        <a name="top"></a>
+        <div class="top">
+            <div class="top_web">
+                <div class="badges">
+                    <img src="pic/design/badges/community_challenge.jpg" alt="4th place community fan sites challenge 2011">  
+                </div>
+
+                <div class="login">
+                    <form style="display: inline" action="" method="post">
+                        <input class="login_item" value="Username" type="text">
+                        <input class="login_item" value="Password" type="password">
+                    </form>
+                </div>
+
+                <div class="social">
+                    <img src="pic/design/social/facebook.png" alt="wowfan.cz on facebook">
+                    <img src="pic/design/social/twitter.png" alt="wowfan.cz on twitter">
+                    <img src="pic/design/social/rss.png" alt="wowfan.cz's RSS">  
+                </div>
+            </div>         
+        </div>     
+        
+        <div class="web">
+            <div class="logo">
+                <img src="pic/design/wowfan_logo.png" alt="wowfan.cz official fan site logo">
+            </div>
+
+            <div class="banner_top">
+                <img src="pic/design/adds/banner_top_blank.jpg" alt="banner blank">
+            </div>
+
+            <div class="menu">
+                <div class="menuentry" id="menu1" style="padding-left: 8px;">
+                    <div class="menutitle" id="menutitle1">
+                        Hlavní stránka
+                    </div>
+                    <div class="submenu" id="submenu1">
+                        Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                    </div>
+                </div>
+                <div class="menuentry" id="menu2">
+                    <div class="menutitle" id="menutitle2">
+                        Povolání
+                    </div>
+                    <div class="submenu" id="submenu2">
+                        2Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                    </div>
+                </div>
+                <div class="menuentry" id="menu3">
+                    <div class="menutitle" id="menutitle3">
+                        Cataclysm
+                    </div>
+                    <div class="submenu" id="submenu3">
+                        3Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Porno s Ellem<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Sex u Hanzika<br>
+                        <img src="pic/design/menu_u_sep.png" alt="menu separator" class="menusep"><br>
+                        Jerryho pohádky
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="boxes">
+                <div class="leftbox">
+                    <div class="top_news">
+                        <img class="top_news_logo" src="pic/design/temp/news_logo.jpg" alt="temporary news logo" id="top_news_logo1">
+                        <img class="top_news_logo" src="pic/design/temp/news_logo2.jpg" alt="temporary news logo 2" id="top_news_logo2">
+                        <img class="top_news_logo" src="http://wowfan.tiscali.cz/pic/podcast/wowfanpodcast.jpg" alt="temporary news logo 3" id="top_news_logo3">
+                        <img class="top_news_logo" src="http://media.wowfan.cz/blizzcon/11/mop-logo.jpg" alt="temporary news logo 4" id="top_news_logo4">
+                        <img class="top_news_logo" src="http://media.wowfan.cz/news/wowfan2011.jpg" alt="temporary news logo 5" id="top_news_logo5">
+                    </div>
+                    <div class="arrow_left_big">
+
+                    </div>
+                    <div class="arrow_right_big">
+                        
+                    </div>
+                </div>
+
+                <div class="rightbox">  
+                    <div class="rightbox_text" id="rightbox_text1">
+                        <div class="rightbox_left">
+                            <h3>Nejnovější články</h3>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                        </div>
+
+                        <div class="rightbox_right">
+                            <h3>Nejnovější komentáře</h3>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                        </div>
+                    </div>
+
+                    <div class="rightbox_text" id="rightbox_text2">
+                        <div class="rightbox_left">
+                            <h3>Nejlepší piva</h3>
+                            <h4>27.1.</h4> Maestro<br>
+                            <h4>27.1.</h4> Maestro<br>
+                            <h4>27.1.</h4> Maestro<br>
+                            <h4>27.1.</h4> Maestro<br>
+                            <h4>27.1.</h4> Maestro<br>
+                        </div>
+
+                        <div class="rightbox_right">
+                            <h3>Nejlepší hry</h3>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                        </div>
+                    </div>
+
+                    <div class="rightbox_text" id="rightbox_text3">
+                        <div class="rightbox_left">
+                            <h3>Nejlepší lidi</h3>
+                            <h4>27.1.</h4> Adam Kučera<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                        </div>
+
+                        <div class="rightbox_right">
+                            <h3>Nejnovější odsouzenci</h3>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                            <h4>27.1.</h4> bla bla bla bla bla<br>
+                        </div>
+                    </div>
+
+                    <div class="arrow_left_small">
+
+                    </div>
+
+                    <div class="arrow_right_small">
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="hotnews">
+                Dnes byl oznámen nový datadisk pro WoW - Mists of Pandaria! Nová rasa a povolání!
+            </div>
+
+            <div class="content">
+                <div class="content_top">
+                    Reklama xzone nebo nějaká jiná kravina. Reklama xzone nebo nějaká jiná kravina.
+                </div>
+
+
+
+                <div class="mainpage_menu">
+                    <div class="mainpage_menuentry" style="padding-left: 35px;">
+                        <img class="mainpage_menu_arrow" src="pic/design/arrow_selected.png" alt="selected type" id="arrow_hot">
+                        ŽHAVÉ NOVINKY
+                    </div>
+                    <div class="mainpage_menuentry">
+                        <img class="mainpage_menu_arrow" src="pic/design/arrow_selected.png" alt="selected type" id="arrow_news">
+                        NOVINKY
+                    </div>
+                    <div class="mainpage_menuentry">
+                        <img class="mainpage_menu_arrow" src="pic/design/arrow_selected.png" alt="selected type" id="arrow_articles">
+                        ČLÁNKY
+                    </div>
+                </div>
+
+
+
+                <div class="date">
+                    <div class="datetext">
+                        <span class="dm">13.8.</span><br>
+                        <span class="year">2011</span>
+                    </div>
+                </div>
+                <div class="headers">
+                    <h1>Datadisk Mists of Pandaria</h1><br>
+                    napsal: <a href="#">Jerryky</a><br>
+                    > <a href="#">Další datadisk</a> > <a href="#">Úvahy</a>
+                </div>
+                <div class="text">
+                    <div class="news_logo">
+                        <img src="pic/design/temp/news_logo.jpg" alt="temporary news logo">  
+                    </div>
+                    <p>Lorem ipsum dolor sit amet consectetuer pede ante nunc purus eu. Vivamus mus eget ligula sapien suscipit ligula et nec ultrices Lorem. Est convallis Maecenas eget mi Phasellus neque Pellentesque nibh congue augue. Mollis consequat mattis nascetur congue turpis pede Pellentesque justo Sed cursus. Tempor sodales commodo justo enim metus Curabitur Ut id egestas faucibus. Convallis Curabitur dui.</p>
+                    <p>Massa Ut Vestibulum ut arcu ipsum Lorem sem lacus dui Vestibulum. Elit lacinia enim wisi quis faucibus ipsum volutpat urna urna non. Laoreet justo pellentesque non dui nulla nulla wisi nec vitae et. A tempus et libero tristique facilisis felis velit eget tempus id. Dui ante odio Sed nunc venenatis mattis lorem parturient consectetuer metus. Urna ante sed Phasellus pretium risus mauris urna semper vel Cras. Malesuada.</p>
+                    <p>Et ac a convallis Pellentesque Vestibulum volutpat consequat laoreet sem montes. Ut nunc laoreet tortor vitae ut Quisque Curabitur orci feugiat felis. Suscipit tempus quis felis orci Vestibulum gravida Curabitur Nunc ut et. Mollis nulla felis mauris metus hac nulla Pellentesque porttitor sit convallis. Porttitor nonummy risus ultrices Sed Sed purus tellus Nullam Vestibulum leo. Et orci id habitant Nam felis dui parturient lacinia facilisi.</p>
+                    <p>Faucibus ornare Sed ornare nascetur Nulla laoreet et Nam adipiscing sit. Nibh dictum morbi wisi leo rhoncus et velit Curabitur Suspendisse et. Integer hendrerit consequat magna faucibus at metus Nullam nec volutpat et. In Morbi commodo eget Phasellus Curabitur Quisque semper neque Curabitur Vestibulum. Enim sed porttitor Vivamus metus nec.</p>
+                    <p>Lorem ipsum dolor sit amet consectetuer pede ante nunc purus eu. Vivamus mus eget ligula sapien suscipit ligula et nec ultrices Lorem. Est convallis Maecenas eget mi Phasellus neque Pellentesque nibh congue augue. Mollis consequat mattis nascetur congue turpis pede Pellentesque justo Sed cursus. Tempor sodales commodo justo enim metus Curabitur Ut id egestas faucibus. Convallis Curabitur dui.</p>
+                    <p>Massa Ut Vestibulum ut arcu ipsum Lorem sem lacus dui Vestibulum. Elit lacinia enim wisi quis faucibus ipsum volutpat urna urna non. Laoreet justo pellentesque non dui nulla nulla wisi nec vitae et. A tempus et libero tristique facilisis felis velit eget tempus id. Dui ante odio Sed nunc venenatis mattis lorem parturient consectetuer metus. Urna ante sed Phasellus pretium risus mauris urna semper vel Cras. Malesuada.</p>
+                    <p>Et ac a convallis Pellentesque Vestibulum volutpat consequat laoreet sem montes. Ut nunc laoreet tortor vitae ut Quisque Curabitur orci feugiat felis. Suscipit tempus quis felis orci Vestibulum gravida Curabitur Nunc ut et. Mollis nulla felis mauris metus hac nulla Pellentesque porttitor sit convallis. Porttitor nonummy risus ultrices Sed Sed purus tellus Nullam Vestibulum leo. Et orci id habitant Nam felis dui parturient lacinia facilisi.</p>
+                    <p>Faucibus ornare Sed ornare nascetur Nulla laoreet et Nam adipiscing sit. Nibh dictum morbi wisi leo rhoncus et velit Curabitur Suspendisse et. Integer hendrerit consequat magna faucibus at metus Nullam nec volutpat et. In Morbi commodo eget Phasellus Curabitur Quisque semper neque Curabitur Vestibulum. Enim sed porttitor Vivamus metus nec.</p>
+
+                </div>
+                <div class="content_bottom">
+                    Reklama xzone nebo nějaká jiná kravina. Reklama xzone nebo nějaká jiná kravina.
+                </div>
+            </div>
+
+            <div class="rightmenu">
+                <div class="rightmenu_header" id="rightmenu_header_1">
+                    OFFICIAL FANSITE
+                </div>
+                <div class="rightmenu_item_image">
+                    <img src="pic/design/rightmenu_banners/blizzard.jpg" alt="Official Czech and Slovak World of Warcraft Fansite - Blizzard programme">
+                </div>
+
+                <div class="rightmenu_header">
+                    DŮLEŽITÉ ČLÁNKY
+                </div>
+                <div class="rightmenu_item_image">
+                    <img width="221" src="pic/design/temp/imp_article1.jpg" alt="Důležité články">
+                </div>
+                <div class="rightmenu_item_image">
+                    <img width="221" src="pic/design/temp/imp_article2.jpg" alt="Důležité články">
+                </div>
+
+                <div class="rightmenu_header">
+                    SPOLUPRACUJEME
+                </div>
+                <div class="rightmenu_item_image">
+                    <img src="pic/design/rightmenu_banners/fanatics.jpg" alt="Tiscali Games.cz - Fanatics">
+                </div>
+
+                <div class="rightmenu_header">
+                    ANKETA
+                </div>
+                <br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+
+            <div class="bottom">
+                Naprogramoval Wrent (Adam Kučera), design vytvořil Jerryky (Jaroslav Kovář)<br>
+                Všechna práva vyhrazena - Adam Kučera - WoWfan.cz 2006-2012<br>
+                Obsah webu nesmí být publikován bez souhlasu vlastníka licence nebo autora.<br> 
+            </div>
+
+            <div class="blank">
+
+            </div>     
+
+        </div>
+
+        <div class="go_top">
+            <a href="#top"><img border="0" src="pic/design/fixed_go_top.png" alt="go top - nahoru"></a>
+        </div>
+
+    </body>
+</html>
