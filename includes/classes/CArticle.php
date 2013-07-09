@@ -1,11 +1,6 @@
 <?php
 
 class CArticle {
-    /* !
-     * New Article object stores all information about article and allows to work with it.
-     * \param $link Unique link of the article, can be NULL (if creating new article)
-     * \param $id Unique id of the article, can be NULL (if creating new article)
-     */
 
     private $m_link;
     private $m_id;
@@ -28,6 +23,12 @@ class CArticle {
     private $m_array;
     private $m_newArticle;
     private $m_database;
+
+    /* !
+     * New Article object stores all information about article and allows to work with it.
+     * \param $link Unique link of the article, can be NULL (if creating new article)
+     * \param $id Unique id of the article, can be NULL (if creating new article)
+     */
 
     public function __construct($database, $link = NULL, $id = NULL) {
         $this->m_link = $link;
@@ -232,5 +233,4 @@ class CArticle {
     }
 
 }
-
 ?>

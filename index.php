@@ -137,7 +137,7 @@ require_once "includes/html/head.php";
                 </div>
 
                 <div class="rightbox">  
-                   <?php require_once "includes/html/rightbox.php";?>
+                   <?php require_once "includes/rightbox.php";?>
                 </div>
             </div>
 
