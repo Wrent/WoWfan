@@ -31,12 +31,12 @@ class CDatabase {
      */
 
     public function Connect() {
-        $this->m_connection = mysql_connect($this->m_host, $this->m_login, $this->m_password) or die($this->ThrowError(mysql_error()));
+        $this->m_connection = mysql_connect($this->m_host, $this->m_login, $this->m_password) or die($this->ThrowError(mysql_error($this->m_connection)));
 
-        mysql_query("SET CHARACTER SET utf8") or die($this->ThrowError(mysql_error()));
-        mysql_query("SET NAMES utf8") or die($this->ThrowError(mysql_error()));
+        mysql_query("SET CHARACTER SET utf8", $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
+        mysql_query("SET NAMES utf8", $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
         //chooses the right database
-        mysql_select_db($this->m_database) or die($this->ThrowError(mysql_error()));
+        mysql_select_db($this->m_database, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
     }
 
     /* !
@@ -48,12 +48,17 @@ class CDatabase {
     public function Insert($table, $item) {
         $query = "INSERT INTO " . $table . " (";
         foreach ($item as $key => $value) {
-            $collumns [] = Escape($key);
-            $values [] = Escape($value);
+            $collumns [] = $this->Escape($key);
+            $values [] = $this->Escape($value);
         }
+        
+        foreach ($values as &$value) {
+            $value = "'".$value."'";
+        }
+        
         $query .= implode(",", $collumns) . ") VALUES (" . implode(",", $values) . ");";
-
-        mysql_query($query) or die($this->ThrowError(mysql_error()));
+        
+        mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
     }
 
     /* !
@@ -62,12 +67,18 @@ class CDatabase {
      */
 
     public function Query($query) {
-        $q = mysql_query($query) or die($this->ThrowError(mysql_error()));
+        $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
         return $q;
     }
 
     public function Escape($string) {
-        return mysql_real_escape_string($string);
+        return mysql_real_escape_string($string, $this->m_connection);
+    }
+    
+    public function Count($table, $field) {
+        $query = "SELECT COUNT($field) FROM $table;";
+        $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
+        return mysql_result($q, 0);
     }
 
     /* ----------------------------------------------------------------------------------------------------------------- */

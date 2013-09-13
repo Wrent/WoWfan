@@ -27,7 +27,7 @@ class CArticle {
     /* !
      * New Article object stores all information about article and allows to work with it.
      * \param $link Unique link of the article, can be NULL (if creating new article)
-     * \param $id Unique id of the article, can be NULL (if creating new article)
+     * \param $id Unique id of the aIrticle, can be NULL (if creating new article)
      */
 
     public function __construct($database, $link = NULL, $id = NULL) {

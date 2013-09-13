@@ -57,6 +57,7 @@ CREATE TABLE `user` (
   `activated` TINYINT NOT NULL DEFAULT 0,
   `warnings` INT NOT NULL DEFAULT 0,
   `last_warned` INT NULL DEFAULT NULL,
+  `newsletter` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
 KEY (`nick`),
 KEY (`email`)
@@ -171,7 +172,6 @@ CREATE TABLE `highlight` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `position` INT NOT NULL DEFAULT 0,
   `pic_big` VARCHAR(250) NOT NULL,
-  `pic_small` VARCHAR(250) NOT NULL,
   `link` VARCHAR(250) NOT NULL,
   `id_user` INT NOT NULL,
   `visible` TINYINT NOT NULL DEFAULT 0,
@@ -315,8 +315,8 @@ ALTER TABLE `rank_list` ADD FOREIGN KEY (id_rank) REFERENCES `rank` (`id`);
 
 -- INSERT INTO `article` (`id`,`title`,`description`,`text`,`time`,`views`,`link`,`auto_spacing`,`comments_cnt`,`rating`,`rating_now`,`source`,`type`) VALUES
 -- ('','','','','','','','','','','','','');
--- INSERT INTO `user` (`id`,`nick`,`password`,`name`,`surname`,`residence`,`email`,`icq`,`skype`,`url`,`activated`,`warnings`,`last_warned`) VALUES
--- ('','','','','','','','','','','','','');
+-- INSERT INTO `user` (`id`,`nick`,`password`,`name`,`surname`,`residence`,`email`,`icq`,`skype`,`url`,`activated`,`warnings`,`last_warned`,`newsletter`) VALUES
+-- ('','','','','','','','','','','','','','');
 -- INSERT INTO `authorship` (`id_user`,`id_article`) VALUES
 -- ('','');
 -- INSERT INTO `being_in_category` (`id_article`,`id_category`) VALUES
@@ -331,8 +331,8 @@ ALTER TABLE `rank_list` ADD FOREIGN KEY (id_rank) REFERENCES `rank` (`id`);
 -- ('','','','','');
 -- INSERT INTO `category` (`id`,`title`) VALUES
 -- ('','');
--- INSERT INTO `highlight` (`id`,`position`,`pic_big`,`pic_small`,`link`,`id_user`,`visible`) VALUES
--- ('','','','','','','');
+-- INSERT INTO `highlight` (`id`,`position`,`pic_big`,`link`,`id_user`,`visible`) VALUES
+-- ('','','','','','');
 -- INSERT INTO `log` (`id`,`what`,`time`,`id_user`) VALUES
 -- ('','','','');
 -- INSERT INTO `menu` (`id`,`title`,`position`,`link`) VALUES
