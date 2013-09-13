@@ -1,0 +1,348 @@
+
+
+
+
+-- ---
+-- Globals
+-- ---
+
+-- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- ---
+-- Table 'article'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `article`;
+		
+CREATE TABLE `article` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(200) NOT NULL DEFAULT 'NULL',
+  `description` MEDIUMTEXT NULL DEFAULT NULL,
+  `text` BLOB NOT NULL,
+  `time` BIGINT NOT NULL,
+  `views` INT NOT NULL DEFAULT 0,
+  `link` VARCHAR(300) NOT NULL,
+  `auto_spacing` TINYINT NOT NULL DEFAULT 0,
+  `comments_cnt` INT NOT NULL DEFAULT 0,
+  `rating` INT NOT NULL DEFAULT 0,
+  `rating_now` FLOAT NOT NULL,
+  `source` MEDIUMTEXT NULL DEFAULT NULL,
+  `type` VARCHAR(1) NOT NULL,
+  PRIMARY KEY (`id`),
+KEY (`title`),
+  UNIQUE KEY (`link`),
+KEY (`type`)
+);
+
+-- ---
+-- Table 'user'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `user`;
+		
+CREATE TABLE `user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nick` VARCHAR(30) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
+  `name` VARCHAR(200) NULL DEFAULT NULL,
+  `surname` VARCHAR(200) NULL DEFAULT NULL,
+  `residence` VARCHAR(200) NULL DEFAULT NULL,
+  `email` VARCHAR(200) NOT NULL,
+  `icq` VARCHAR(20) NULL DEFAULT NULL,
+  `skype` VARCHAR(200) NULL DEFAULT NULL,
+  `url` VARCHAR(400) NULL DEFAULT NULL,
+  `activated` TINYINT NOT NULL DEFAULT 0,
+  `warnings` INT NOT NULL DEFAULT 0,
+  `last_warned` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+KEY (`nick`),
+KEY (`email`)
+);
+
+-- ---
+-- Table 'authorship'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `authorship`;
+		
+CREATE TABLE `authorship` (
+  `id_user` INT NOT NULL,
+  `id_article` INT NOT NULL,
+  PRIMARY KEY (`id_user`, `id_article`)
+);
+
+-- ---
+-- Table 'being_in_category'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `being_in_category`;
+		
+CREATE TABLE `being_in_category` (
+  `id_article` INT NOT NULL,
+  `id_category` INT NOT NULL,
+  PRIMARY KEY (`id_article`, `id_category`)
+);
+
+-- ---
+-- Table 'rater'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `rater`;
+		
+CREATE TABLE `rater` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `ip` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`id`),
+KEY (`ip`)
+);
+
+-- ---
+-- Table 'article_rated'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `article_rated`;
+		
+CREATE TABLE `article_rated` (
+  `id_rater` INT NOT NULL,
+  `id_article` INT NOT NULL,
+  PRIMARY KEY (`id_rater`, `id_article`)
+);
+
+-- ---
+-- Table 'ip_usage'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `ip_usage`;
+		
+CREATE TABLE `ip_usage` (
+  `id_rater` INT NULL DEFAULT NULL,
+  `id_user` INT NOT NULL,
+  PRIMARY KEY (`id_rater`, `id_user`)
+);
+
+-- ---
+-- Table 'comment'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `comment`;
+		
+CREATE TABLE `comment` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_article` INT NOT NULL,
+  `id_user` INT NOT NULL,
+  `text` MEDIUMTEXT NOT NULL,
+  `time` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+KEY (`id_user`),
+KEY (`id_article`)
+);
+
+-- ---
+-- Table 'category'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `category`;
+		
+CREATE TABLE `category` (
+  `id` INT NOT NULL,
+  `title` VARCHAR(250) NOT NULL,
+  PRIMARY KEY (`id`),
+KEY (`title`)
+);
+
+-- ---
+-- Table 'highlight'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `highlight`;
+		
+CREATE TABLE `highlight` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `position` INT NOT NULL DEFAULT 0,
+  `pic_big` VARCHAR(250) NOT NULL,
+  `pic_small` VARCHAR(250) NOT NULL,
+  `link` VARCHAR(250) NOT NULL,
+  `id_user` INT NOT NULL,
+  `visible` TINYINT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+KEY (`position`)
+);
+
+-- ---
+-- Table 'log'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `log`;
+		
+CREATE TABLE `log` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `what` MEDIUMTEXT NOT NULL,
+  `time` INT NOT NULL,
+  `id_user` INT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'menu'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `menu`;
+		
+CREATE TABLE `menu` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(100) NOT NULL,
+  `position` INT NOT NULL DEFAULT 0,
+  `link` VARCHAR(250) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+KEY (`position`)
+);
+
+-- ---
+-- Table 'item'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `item`;
+		
+CREATE TABLE `item` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(250) NOT NULL,
+  `id_menu` INT NOT NULL,
+  `position` INT NOT NULL DEFAULT 0,
+  `link` VARCHAR(250) NOT NULL,
+  PRIMARY KEY (`id`),
+KEY (`position`)
+);
+
+-- ---
+-- Table 'site'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `site`;
+		
+CREATE TABLE `site` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(30) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'rank'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `rank`;
+		
+CREATE TABLE `rank` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(20) NOT NULL,
+  `site` INT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'rank_list'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `rank_list`;
+		
+CREATE TABLE `rank_list` (
+  `id_user` INT NOT NULL,
+  `id_rank` INT NOT NULL,
+  PRIMARY KEY (`id_user`, `id_rank`)
+);
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+ALTER TABLE `authorship` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
+ALTER TABLE `authorship` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
+ALTER TABLE `being_in_category` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
+ALTER TABLE `being_in_category` ADD FOREIGN KEY (id_category) REFERENCES `category` (`id`);
+ALTER TABLE `article_rated` ADD FOREIGN KEY (id_rater) REFERENCES `rater` (`id`);
+ALTER TABLE `article_rated` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
+ALTER TABLE `ip_usage` ADD FOREIGN KEY (id_rater) REFERENCES `rater` (`id`);
+ALTER TABLE `ip_usage` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
+ALTER TABLE `comment` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
+ALTER TABLE `comment` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
+ALTER TABLE `highlight` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
+ALTER TABLE `log` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
+ALTER TABLE `item` ADD FOREIGN KEY (id_menu) REFERENCES `menu` (`id`);
+ALTER TABLE `rank` ADD FOREIGN KEY (site) REFERENCES `site` (`id`);
+ALTER TABLE `rank_list` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
+ALTER TABLE `rank_list` ADD FOREIGN KEY (id_rank) REFERENCES `rank` (`id`);
+
+-- ---
+-- Table Properties
+-- ---
+
+-- ALTER TABLE `article` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `user` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `authorship` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `being_in_category` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `rater` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `article_rated` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `ip_usage` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `comment` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `category` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `highlight` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `log` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `menu` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `item` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `site` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `rank` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `rank_list` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ---
+-- Test Data
+-- ---
+
+-- INSERT INTO `article` (`id`,`title`,`description`,`text`,`time`,`views`,`link`,`auto_spacing`,`comments_cnt`,`rating`,`rating_now`,`source`,`type`) VALUES
+-- ('','','','','','','','','','','','','');
+-- INSERT INTO `user` (`id`,`nick`,`password`,`name`,`surname`,`residence`,`email`,`icq`,`skype`,`url`,`activated`,`warnings`,`last_warned`) VALUES
+-- ('','','','','','','','','','','','','');
+-- INSERT INTO `authorship` (`id_user`,`id_article`) VALUES
+-- ('','');
+-- INSERT INTO `being_in_category` (`id_article`,`id_category`) VALUES
+-- ('','');
+-- INSERT INTO `rater` (`id`,`ip`) VALUES
+-- ('','');
+-- INSERT INTO `article_rated` (`id_rater`,`id_article`) VALUES
+-- ('','');
+-- INSERT INTO `ip_usage` (`id_rater`,`id_user`) VALUES
+-- ('','');
+-- INSERT INTO `comment` (`id`,`id_article`,`id_user`,`text`,`time`) VALUES
+-- ('','','','','');
+-- INSERT INTO `category` (`id`,`title`) VALUES
+-- ('','');
+-- INSERT INTO `highlight` (`id`,`position`,`pic_big`,`pic_small`,`link`,`id_user`,`visible`) VALUES
+-- ('','','','','','','');
+-- INSERT INTO `log` (`id`,`what`,`time`,`id_user`) VALUES
+-- ('','','','');
+-- INSERT INTO `menu` (`id`,`title`,`position`,`link`) VALUES
+-- ('','','','');
+-- INSERT INTO `item` (`id`,`title`,`id_menu`,`position`,`link`) VALUES
+-- ('','','','','');
+-- INSERT INTO `site` (`id`,`name`) VALUES
+-- ('','');
+-- INSERT INTO `rank` (`id`,`name`,`site`) VALUES
+-- ('','','');
+-- INSERT INTO `rank_list` (`id_user`,`id_rank`) VALUES
+-- ('','');
+
