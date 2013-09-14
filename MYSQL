@@ -32,7 +32,7 @@ CREATE TABLE `article` (
   `type` VARCHAR(1) NOT NULL,
   PRIMARY KEY (`id`),
 KEY (`title`),
-  UNIQUE KEY (`link`),
+  UNIQUE KEY (`link`, `type`),
 KEY (`type`)
 );
 
@@ -58,6 +58,7 @@ CREATE TABLE `user` (
   `warnings` INT NOT NULL DEFAULT 0,
   `last_warned` INT NULL DEFAULT NULL,
   `newsletter` TINYINT NOT NULL,
+  `info` MEDIUMTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
 KEY (`nick`),
 KEY (`email`)
@@ -71,7 +72,7 @@ KEY (`email`)
 DROP TABLE IF EXISTS `authorship`;
 		
 CREATE TABLE `authorship` (
-  `id_user` INT NOT NULL,
+  `id_user` INT NULL DEFAULT NULL,
   `id_article` INT NOT NULL,
   PRIMARY KEY (`id_user`, `id_article`)
 );
@@ -85,22 +86,23 @@ DROP TABLE IF EXISTS `being_in_category`;
 		
 CREATE TABLE `being_in_category` (
   `id_article` INT NOT NULL,
-  `id_category` INT NOT NULL,
+  `id_category` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id_article`, `id_category`)
 );
 
 -- ---
--- Table 'rater'
+-- Table 'ip'
 -- 
 -- ---
 
-DROP TABLE IF EXISTS `rater`;
+DROP TABLE IF EXISTS `ip`;
 		
-CREATE TABLE `rater` (
+CREATE TABLE `ip` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `ip` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`id`),
-KEY (`ip`)
+KEY (`ip`),
+  UNIQUE KEY (`ip`)
 );
 
 -- ---
@@ -124,9 +126,9 @@ CREATE TABLE `article_rated` (
 DROP TABLE IF EXISTS `ip_usage`;
 		
 CREATE TABLE `ip_usage` (
-  `id_rater` INT NULL DEFAULT NULL,
+  `id_ip` INT NULL DEFAULT NULL,
   `id_user` INT NOT NULL,
-  PRIMARY KEY (`id_rater`, `id_user`)
+  PRIMARY KEY (`id_ip`, `id_user`)
 );
 
 -- ---
@@ -139,7 +141,7 @@ DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `id_article` INT NOT NULL,
-  `id_user` INT NOT NULL,
+  `id_user` INT NULL DEFAULT NULL,
   `text` MEDIUMTEXT NOT NULL,
   `time` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
@@ -275,9 +277,9 @@ ALTER TABLE `authorship` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
 ALTER TABLE `authorship` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
 ALTER TABLE `being_in_category` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
 ALTER TABLE `being_in_category` ADD FOREIGN KEY (id_category) REFERENCES `category` (`id`);
-ALTER TABLE `article_rated` ADD FOREIGN KEY (id_rater) REFERENCES `rater` (`id`);
+ALTER TABLE `article_rated` ADD FOREIGN KEY (id_rater) REFERENCES `ip` (`id`);
 ALTER TABLE `article_rated` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
-ALTER TABLE `ip_usage` ADD FOREIGN KEY (id_rater) REFERENCES `rater` (`id`);
+ALTER TABLE `ip_usage` ADD FOREIGN KEY (id_ip) REFERENCES `ip` (`id`);
 ALTER TABLE `ip_usage` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
 ALTER TABLE `comment` ADD FOREIGN KEY (id_article) REFERENCES `article` (`id`);
 ALTER TABLE `comment` ADD FOREIGN KEY (id_user) REFERENCES `user` (`id`);
@@ -296,7 +298,7 @@ ALTER TABLE `rank_list` ADD FOREIGN KEY (id_rank) REFERENCES `rank` (`id`);
 -- ALTER TABLE `user` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `authorship` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `being_in_category` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `rater` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `ip` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `article_rated` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `ip_usage` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `comment` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -315,17 +317,17 @@ ALTER TABLE `rank_list` ADD FOREIGN KEY (id_rank) REFERENCES `rank` (`id`);
 
 -- INSERT INTO `article` (`id`,`title`,`description`,`text`,`time`,`views`,`link`,`auto_spacing`,`comments_cnt`,`rating`,`rating_now`,`source`,`type`) VALUES
 -- ('','','','','','','','','','','','','');
--- INSERT INTO `user` (`id`,`nick`,`password`,`name`,`surname`,`residence`,`email`,`icq`,`skype`,`url`,`activated`,`warnings`,`last_warned`,`newsletter`) VALUES
--- ('','','','','','','','','','','','','','');
+-- INSERT INTO `user` (`id`,`nick`,`password`,`name`,`surname`,`residence`,`email`,`icq`,`skype`,`url`,`activated`,`warnings`,`last_warned`,`newsletter`,`info`) VALUES
+-- ('','','','','','','','','','','','','','','');
 -- INSERT INTO `authorship` (`id_user`,`id_article`) VALUES
 -- ('','');
 -- INSERT INTO `being_in_category` (`id_article`,`id_category`) VALUES
 -- ('','');
--- INSERT INTO `rater` (`id`,`ip`) VALUES
+-- INSERT INTO `ip` (`id`,`ip`) VALUES
 -- ('','');
 -- INSERT INTO `article_rated` (`id_rater`,`id_article`) VALUES
 -- ('','');
--- INSERT INTO `ip_usage` (`id_rater`,`id_user`) VALUES
+-- INSERT INTO `ip_usage` (`id_ip`,`id_user`) VALUES
 -- ('','');
 -- INSERT INTO `comment` (`id`,`id_article`,`id_user`,`text`,`time`) VALUES
 -- ('','','','','');

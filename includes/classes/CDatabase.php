@@ -1,6 +1,7 @@
 <?php
 
 class CDatabase {
+
     private $m_host;
     private $m_login;
     private $m_password;
@@ -45,20 +46,23 @@ class CDatabase {
      * \param $item Item to be added. It must be an array with keys named the same way like in the table.
      */
 
-    public function Insert($table, $item) {
+    public function Insert($table, $item, $forget_error = FALSE) {
         $query = "INSERT INTO " . $table . " (";
         foreach ($item as $key => $value) {
             $collumns [] = $this->Escape($key);
             $values [] = $this->Escape($value);
         }
-        
+
         foreach ($values as &$value) {
-            $value = "'".$value."'";
+            $value = "'" . $value . "'";
         }
-        
+
         $query .= implode(",", $collumns) . ") VALUES (" . implode(",", $values) . ");";
-        
-        mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
+
+        if ($forget_error)
+            mysql_query($query, $this->m_connection);
+        else
+            mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
     }
 
     /* !
@@ -66,19 +70,45 @@ class CDatabase {
      * \param $query The query to use.
      */
 
-    public function Query($query) {
-        $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
+    public function Query($query, $forget_error = FALSE) {
+        if ($forget_error)
+            $q = mysql_query($query, $this->m_connection);
+        else
+            $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
+
         return $q;
     }
 
     public function Escape($string) {
         return mysql_real_escape_string($string, $this->m_connection);
     }
-    
+
     public function Count($table, $field) {
         $query = "SELECT COUNT($field) FROM $table;";
-        $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
+        $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
         return mysql_result($q, 0);
+    }
+
+    public function SelectSingle($table, $field, $where = NULL, $logic = "AND") {
+        $query = "SELECT $field FROM $table";
+        if ($where != NULL) {
+            $query .= " WHERE ";
+            $i = 0;
+            foreach ($where as $key => $value) {
+                if ($i > 0)
+                    $query .= " $logic ";
+                $query .= $this->Escape($key);
+                $query .= " = '";
+                $query .= $this->Escape($value);
+                $query .= "'";
+                $i++;
+            }
+        }
+        $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
+        if (mysql_num_rows($q) > 0)
+            return mysql_result($q, 0);
+        else
+            return FALSE;
     }
 
     /* ----------------------------------------------------------------------------------------------------------------- */
@@ -88,15 +118,18 @@ class CDatabase {
      * \param $error Error message from the database.
      */
 
-    private function ThrowError($error) {
+    private function ThrowError($error, $query = "") {
         echo "<br><br>Omlouváme se návštěvníkům webu, ale nastala nečekaná chyba v databázi.
     		Pokud tento problém přetrvá, můžete kontaktovat administrátora na adam.kucera@wrent.cz.<br><br>
     		Díky, tým WoWfan.cz.<br><br>";
         echo "Text chyby: " . $error . "<br><br>";
+        if ($query != "")
+            echo "Původní dotaz: " . $query . "<br><br>";
 
-        $errorLog = array('msg' => $error);
+        $errorLog = array('msg' => $error . " - " . $query);
 
-        $this->Insert("error_log", $errorLog);
+        //this insert will not be logged, if it failes, it can cause a recursive deadlock
+        $this->Insert("error_log", $errorLog, TRUE);
     }
 
 }

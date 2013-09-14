@@ -4,7 +4,7 @@ require_once 'includes/classes/CDatabase.php';
 require_once 'includes/classes/CArticle.php';
 ///zkouska
 
-$database = new CDatabase("localhost", "wowherniweb", "woWKo4-db;15", "webcore");
+$database = new CDatabase("localhost", "root", "root", "aurora");
 $database->Connect();
 
 
