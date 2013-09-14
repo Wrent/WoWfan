@@ -2,7 +2,6 @@
 header('Content-Type: text/html; charset=utf-8');
 require_once 'includes/classes/CDatabase.php';
 require_once 'includes/classes/CArticle.php';
-///zkouska
 
 $database = new CDatabase("localhost", "root", "root", "aurora");
 $database->Connect();

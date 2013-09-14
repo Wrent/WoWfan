@@ -1,4 +1,6 @@
 <?php
+//imports all the articles (even news and usertexts)
+
 
 $old_table = 'clanky';
 $new_table = 'article';
@@ -12,24 +14,29 @@ if ($database_new->Count($new_table, "*") == 0) {
     //insert the data to the new table
     $i = 0;
     while ($r = mysql_fetch_assoc($q)) {
-        //some of the comments have the wrong time
+        //some of the articles have the wrong time
         if ($r['time'] == NULL) {
             $date = date_create_from_format('d.m.Y ? H:i:s', trim($r['datum']));
-            if(!$date)
+            //lot of articles did not have seconds specified, so try also this 
+            //before throwing an error
+            if (!$date)
                 $date = date_create_from_format('d.m.Y ? H:i', trim($r['datum']));
-            if(!$date)
-                echo $r['id']."<br>";
+            //if there is still problem, print id of the article
+            if (!$date)
+                echo $r['id'] . "<br>";
             $time = date_format($date, 'U');
         } else {
             $time = $r['time'];
         }
-        
+
+        //this changes ano / ne to more IT format
         if ($r['odradkovani'] == "ano") {
             $odradkovani = 1;
         } else {
             $odradkovani = 0;
         }
 
+        //specify data
         $data = array(
             'id' => $r['id'],
             'title' => $r['nazev'],

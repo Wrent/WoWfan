@@ -1,4 +1,7 @@
 <?php
+
+//imports highlights using unified import script
+
 $old_table = "cantmiss";
 $new_table = "highlight";
 $fields = array(

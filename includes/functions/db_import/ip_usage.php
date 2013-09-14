@@ -1,4 +1,7 @@
 <?php
+
+//imports the IPs users used to register
+
 $old_table = 'user';
 $new_table = 'ip';
 
@@ -17,6 +20,7 @@ if ($database_new->Count('ip', "*") == 0) {
         );
         $database_new->Insert($new_table, $data1, TRUE);
         
+        //we have to find out id of added ip
         $where = array ('ip' => $r['ip']);
         $ip = $database_new->SelectSingle('ip', 'id', $where);
         $data2 = array (

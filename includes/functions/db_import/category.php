@@ -1,5 +1,7 @@
 <?php
 
+//imports categories using unified import function
+
 $old_table = "kategorie";
 $new_table = "category";
 $fields = array(

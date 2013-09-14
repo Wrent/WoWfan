@@ -12,6 +12,7 @@ if ($database_new->Count($new_table, "*") == 0) {
     //insert the data to the new table
     $i = 0;
     while ($r = mysql_fetch_assoc($q)) {
+        //for example news did not have categories
         if($r['kategorie'] == 0)
             $id_category = NULL;
         else

@@ -13,6 +13,7 @@ if ($database_new->Count($new_table, "*") == 0) {
     $i = 0;
     while ($r = mysql_fetch_assoc($q)) {
         $ips = explode(",", $r['hlasujici']);
+        
         //insert all ips to database
         foreach ($ips as $ip) {
             $data = array(

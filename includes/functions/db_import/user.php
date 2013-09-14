@@ -1,5 +1,7 @@
 <?php
 
+//imports users using unified import script
+
 $old_table = "users";
 $new_table = "user";
 $fields = array(

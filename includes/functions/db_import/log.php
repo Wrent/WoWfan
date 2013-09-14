@@ -1,4 +1,7 @@
 <?php
+
+//imports logs using unified import script
+
 $old_table = "logy";
 $new_table = "log";
 $fields = array(

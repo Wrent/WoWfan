@@ -50,7 +50,7 @@ if ($database_new->Count($new_table, "*") == 0) {
             'id' => $r['id'],
             'id_article' => $id_article,
             'id_user' => $id_user,
-            'text' => $r[text],
+            'text' => $r['text'],
             'time' => $time,
         );
         $database_new->Insert($new_table, $data);

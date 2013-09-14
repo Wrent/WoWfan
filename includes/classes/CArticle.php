@@ -2,38 +2,44 @@
 
 class CArticle {
 
+    //------------VARIABLES FROM DB-------------------------------
     private $m_link;
     private $m_id;
-    private $m_nazev;
-    private $m_kategorie;
-    private $m_popis;
+    private $m_title;
+    private $m_description;
     private $m_text;
-    private $m_id_autor;
-    private $m_autor;
-    private $m_shlednuti;
-    private $m_hodnoceni;
-    private $m_hlasujici;
-    private $m_odradkovani;
+    private $m_views;
+    private $m_rating;
+    private $m_auto_spacing;
     private $m_time;
-    private $m_pocet_komentaru;
-    private $m_now_hodnoceni;
-    private $m_zdroj;
-    private $m_datum;
-    private $m_typ;
+    private $m_comments_cnt;
+    private $m_rating_now;
+    private $m_source;
+    private $m_type;
+    // ----------------OBJECT VARIABLES----------------------------
+    private $m_authors;
+    private $m_categories;
+    private $m_raters;
+    // ----------------OTHER VARIABLES-----------------------------
     private $m_array;
     private $m_newArticle;
     private $m_database;
 
+    const TABLE = 'article';
+
     /* !
      * New Article object stores all information about article and allows to work with it.
+     * \param $database Link to the database object, where the article will be stored.
      * \param $link Unique link of the article, can be NULL (if creating new article)
-     * \param $id Unique id of the aIrticle, can be NULL (if creating new article)
+     * \param $id Unique id of the article, can be NULL (if creating new article)
      */
 
-    public function __construct($database, $link = NULL, $id = NULL) {
+    public function __construct($database, $link = NULL, $type = NULL, $id = NULL) {
         $this->m_link = $link;
+        $this->m_type = $type;
         $this->m_id = $id;
 
+        //is this new or existing article?
         if (!isset($link) AND !isset($id)) {
             $this->m_newArticle = true;
             return;
@@ -43,32 +49,28 @@ class CArticle {
 
         if (isset($link)) {
             $link = $database->Escape($link);
-            $q = $database->Query("SELECT * FROM clanky WHERE link = '" . $link . "' AND typ = 'C';");
+            $type = $database->Escape($type);
+            $q = $database->Query("SELECT * FROM " . TABLE . " WHERE link = '$link' AND typ = '$type';");
         } else {
             $id = $database->Escape($id);
-            $q = $database->Query("SELECT * FROM clanky WHERE id = '" . $id . "' AND typ = 'C';");
+            $q = $database->Query("SELECT * FROM " . TABLE . " WHERE id = '$id';");
         }
 
         $article = mysql_fetch_array($q);
 
         $this->m_link = $article["link"];
         $this->m_id = $article["id"];
-        $this->m_nazev = $article["nazev"];
-        $this->m_kategorie = $article["kategorie"];
-        $this->m_popis = $article["popis"];
+        $this->m_title = $article["title"];
+        $this->m_description = $article["description"];
         $this->m_text = $article["text"];
-        $this->m_id_autor = $article["id_autor"];
-        $this->m_autor = $article["autor"];
-        $this->m_shlednuti = $article["shlednuti"];
-        $this->m_hodnoceni = $article["hodnoceni"];
-        $this->m_hlasujici = $article["hlasujici"];
-        $this->m_odradkovani = $article["odradkovani"];
+        $this->m_views = $article["views"];
+        $this->m_rating = $article["rating"];
+        $this->m_auto_spacing = $article["auto_spacing"];
         $this->m_time = $article["time"];
-        $this->m_pocet_komentaru = $article["pocet_komentaru"];
-        $this->m_now_hodnoceni = $article["now_hodnoceni"];
-        $this->m_zdroj = $article["zdroj"];
-        $this->m_typ = $article["typ"];
-        $this->m_datum = $article["datum"];
+        $this->m_comments_cnt = $article["comments_cnt"];
+        $this->m_rating_now = $article["rating_now"];
+        $this->m_source = $article["source"];
+        $this->m_type = $article["type"];
 
         $this->m_array = $article;
 
@@ -80,23 +82,12 @@ class CArticle {
      */
 
     public function save() {
+        $this->getVariablesToArray();
         if ($this->m_newArticle) {
-            $this->getVariablesToArray();
-
-            unset($value);
-
-            $this->m_database->Insert("clanky", $this->m_array);
+            $this->m_database->Insert(TABLE, $this->m_array);
         } else {
-            $this->m_nazev = $this->m_database->Escape($this->m_nazev);
-            $this->m_popis = $this->m_database->Escape($this->m_popis);
-            $this->m_kategorie = $this->m_database->Escape($this->m_kategorie);
-            $this->m_text = $this->m_database->Escape($this->m_text);
-            $this->m_id_autor = $this->m_database->Escape($this->m_id_autor);
-            $this->m_autor = $this->m_database->Escape($this->m_autor);
-            $this->m_link = $this->m_database->Escape($this->m_link);
-            $this->m_odradkovani = $this->m_database->Escape($odradkovani);
-            $this->m_typ = $this->m_database->Escape($typ);
-            $this->m_database->Query("UPDATE clanky SET nazev='" . $this->m_nazev . "', popis='" . $this->m_popis . "', kategorie='" . $this->m_kategorie . "', text='" . $this->m_text . "', id_autor='" . $this->m_id_autor . "', autor='" . $this->m_autor . "', link='" . $this->m_link . "', odradkovani='" . $this->m_odradkovani . "' WHERE link = '" . $this->m_link . "' AND typ = '" . $this->m_typ . "';");
+            $where = array('id' => $this->m_id);
+            $this->m_database->Update(TABLE, $this->m_array, $where);
         }
     }
 
@@ -111,20 +102,20 @@ class CArticle {
         $this->m_link = $link;
     }
 
-    public function getNazev() {
-        return $this->m_nazev;
+    public function getTitle() {
+        return $this->m_title;
     }
 
-    public function setNazev($nazev) {
-        $this->m_nazev = $nazev;
+    public function setTitle($title) {
+        $this->m_title = $title;
     }
 
-    public function getPopis() {
-        return $this->m_popis;
+    public function getDescription() {
+        return $this->m_description;
     }
 
-    public function setPopis($popis) {
-        $this->m_popis = $popis;
+    public function setDescription($description) {
+        $this->m_description = $description;
     }
 
     public function getText() {
@@ -144,48 +135,23 @@ class CArticle {
     }
 
     public function getDay() {
-        if (!empty($this->m_datum) AND $this->m_datum != "NULL") {
-            preg_match('/([0-9]{1,2})\..*/', $this->m_datum, $matches);
-            return $matches[1];
-        } else {
-            return Date("d", $this->m_time);
-        }
+        return Date("d", $this->m_time);
     }
 
     public function getMonth() {
-        if (!empty($this->m_datum) AND $this->m_datum != "NULL") {
-            preg_match('/[0-9]{1,2}\.([0-9]{1,2}).*/', $this->m_datum, $matches);
-            return $matches[1];
-        } else {
-            return Date("m", $this->m_time);
-        }
+        return Date("m", $this->m_time);
     }
 
     public function getYear() {
-        if (!empty($this->m_datum) AND $this->m_datum != "NULL") {
-            preg_match('/[0-9]{1,2}\.[0-9]{1,2}\.([0-9]{4,4}).*/', $this->m_datum, $matches);
-            return $matches[1];
-        } else {
-            return Date("Y", $this->m_time);
-        }
+        return Date("Y", $this->m_time);
     }
 
     public function getHour() {
-        if (!empty($this->m_datum) AND $this->m_datum != "NULL") {
-            preg_match('/.*\| ([0-9]{1,2}).*/', $this->m_datum, $matches);
-            return $matches[1];
-        } else {
-            return Date("h", $this->m_time);
-        }
+        return Date("h", $this->m_time);
     }
 
     public function getMinute() {
-        if (!empty($this->m_datum) AND $this->m_datum != "NULL") {
-            preg_match('/.*\| [0-9]{1,2}:([0-9]{1,2}).*/', $this->m_datum, $matches);
-            return $matches[1];
-        } else {
-            return Date("i", $this->m_time);
-        }
+        return Date("i", $this->m_time);
     }
 
     public function getAutor() {
@@ -214,23 +180,19 @@ class CArticle {
         $this->m_array = array(
             'link' => $this->m_link,
             'id' => $this->m_id,
-            'kategorie' => $this->m_kategorie,
-            'popis' => $this->m_popis,
+            'description' => $this->m_description,
             'text' => $this->m_text,
-            'id_autor' => $this->m_id_autor,
-            'autor' => $this->m_autor,
-            'shlednuti' => $this->m_shlednuti,
-            'hodnoceni' => $this->m_hodnoceni,
-            'hlasujici' => $this->m_hlasujici,
-            'odradkovani' => $this->m_odradkovani,
+            'views' => $this->m_views,
+            'rating' => $this->m_rating,
+            'auto_spacing' => $this->m_auto_spacing,
             'time' => $this->m_time,
-            'pocet_komentaru' => $this->m_pocet_komentaru,
-            'now_hodnoceni' => $this->m_now_hodnoceni,
-            'zdroj' => $this->m_zdroj,
-            'typ' => $this->m_typ,
-            'datum' => $this->m_datum,
+            'comments_cnt' => $this->m_comments_cnt,
+            'rating_now' => $this->m_rating_now,
+            'source' => $this->m_source,
+            'type' => $this->m_type,
         );
     }
 
 }
+
 ?>
