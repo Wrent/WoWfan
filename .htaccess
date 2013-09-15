@@ -2,7 +2,6 @@ Options +FollowSymLinks
 ErrorDocument 404 /404-error/
 RewriteEngine on
 
-
 RewriteBase /aurora_wowfan/
 
 RewriteRule clanky/(.*)/(.*)/ index.php?presenter=article&link=$1&page=$2
@@ -71,34 +70,6 @@ RewriteRule napomenout/(.*)/(.*)/ index.php?napomenout=$1&id=$2
 RewriteRule snizit-napomenuti/(.*)/ index.php?snizit-napomenuti=$1
 RewriteRule hlasovat-anketa/(.*)/(.*)/ includes/poll/poll.php?hlasovat=$1&moznost=$2
 
-RewriteRule redaktori/index/ index.php?akce=redaktori
-RewriteRule redaktori/poslat-zpravu/ index.php?akce=redaktori-poslat-zpravu
-RewriteRule redaktori/poslat-zpravu/(.*)/ index.php?akce=redaktori-poslat-zpravu&nick=$1
-RewriteRule redaktori/prijate-zpravy/(.*)/ index.php?akce=redaktori-prijate-zpravy&strana=$1
-RewriteRule redaktori/zprava/(.*)/ index.php?akce=redaktori-zprava&id=$1
-RewriteRule redaktori/ukoly/ index.php?akce=redaktori-ukoly
-RewriteRule redaktori/prijmout-ukol/(.*)/ index.php?akce=redaktori-ukoly&prijmout=$1
-RewriteRule redaktori/administrace-ukoly/(.*)/ index.php?akce=redaktori-administrace-ukoly&strana=$1
-RewriteRule redaktori/odpovedet/(.*)/ index.php?akce=redaktori-poslat-zpravu&nick=$1&odpovedet
-RewriteRule redaktori/oznacit-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&oznacit=$1
-RewriteRule redaktori/odznacit-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&odznacit=$1
-RewriteRule redaktori/smazat-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&smazat=$1
-RewriteRule redaktori/upravit-ukol/(.*)/ index.php?akce=redaktori-administrace-ukoly&upravit=$1
-RewriteRule redaktori/pridat-praci/ index.php?akce=redaktori-pridat-praci
-RewriteRule redaktori/prace/ index.php?akce=redaktori-prace
-RewriteRule redaktori/oznacit-praci/(.*)/ index.php?akce=redaktori-prace&hotovo=$1
-RewriteRule redaktori/shout/(.*)/ index.php?akce=redaktori-shout&strana=$1
-RewriteRule redaktori/statistiky/(.*)/ index.php?akce=redaktori-statistiky&strana=$1
-RewriteRule redaktori/obrazky/(.*)/ index.php?akce=redaktori-obrazky&strana=$1
-RewriteRule redaktori/ankety/ index.php?akce=redaktori-ankety
-RewriteRule redaktori/zobrazit-anketu/(.*)/ index.php?akce=redaktori-zobrazit-anketu&id=$1
-RewriteRule redaktori/napomenuti/(.*)/ index.php?akce=redaktori-napomenuti&strana=$1
-RewriteRule redaktori/nahlasene/(.*)/ index.php?akce=redaktori-nahlasene&strana=$1
-RewriteRule redaktori/cant-miss/ index.php?akce=redaktori-cant-miss
-RewriteRule redaktori/skryt-obrazek/(.*)/ index.php?akce=redaktori-skryt-obrazek&id=$1
-RewriteRule redaktori/obrazek-dolu/(.*)/ index.php?akce=redaktori-obrazek-dolu&id=$1
-RewriteRule redaktori/obrazek-nahoru/(.*)/ index.php?akce=redaktori-obrazek-nahoru&id=$1
-RewriteRule redaktori/zobrazit-obrazek/(.*)/ index.php?akce=redaktori-zobrazit-obrazek&id=$1
 RewriteRule sitemap.xml sitemap.php
 RewriteRule topeni-bacovsky.cz/(.*) http://www.topeni-bacovsky.cz/$1 [R=301,L]
 RewriteRule topeni-bacovsky.cz http://www.topeni-bacovsky.cz/ [R=301,L]

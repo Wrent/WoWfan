@@ -1,15 +1,29 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 require_once 'includes/classes/CDatabase.php';
-require_once 'includes/classes/CArticle.php';
 
 $database = new CDatabase("localhost", "root", "root", "aurora");
 $database->Connect();
 
 
+//should I show something? Prepare variables!
+if (isset($_GET["presenter"])) {
+    if (isset($_GET["link"])) {
+        require_once 'includes/classes/CArticle.php';
+        try {
+            $article = new CArticle($database, $_GET["link"], 'C');
+        } catch (NotFoundException $e) {
+            header("HTTP/1.0 404 Not Found");
+            echo "404";
+        }
+    }
+}
 
-require_once "includes/html/head.php";
-?>
+
+
+
+    require_once "includes/html/head.php";
+    ?>
     <body>
         <a name="top"></a>
         <div class="top">
@@ -32,7 +46,7 @@ require_once "includes/html/head.php";
                 </div>
             </div>         
         </div>     
-        
+
         <div class="web">
             <div class="logo">
                 <img src="pic/design/wowfan_logo.png" alt="wowfan.cz official fan site logo">
@@ -131,12 +145,12 @@ require_once "includes/html/head.php";
 
                     </div>
                     <div class="arrow_right_big">
-                        
+
                     </div>
                 </div>
 
                 <div class="rightbox">  
-                   <?php require_once "includes/rightbox.php";?>
+                    <?php require_once "includes/rightbox.php"; ?>
                 </div>
             </div>
 
@@ -167,13 +181,13 @@ require_once "includes/html/head.php";
                 </div>
                 <?php
                 if (isset($_GET["presenter"]))
-                    require_once "includes/presenters/".$_GET["presenter"].".php";
-                else require_once "presenter.html";
-
+                    require_once "includes/presenters/" . $_GET["presenter"] . ".php";
+                else
+                    require_once "presenter.html";
                 ?>
 
 
-                
+
                 <div class="content_bottom">
                     Reklama xzone nebo nějaká jiná kravina. Reklama xzone nebo nějaká jiná kravina.
                 </div>
@@ -213,18 +227,18 @@ require_once "includes/html/head.php";
             <div class="bottom">
                 Naprogramoval Wrent (Adam Kučera), design vytvořil Jerryky (Jaroslav Kovář)<br>
                 Všechna práva vyhrazena - Adam Kučera - WoWfan.cz 2006-<?php echo Date("Y"); ?><br>
-                Obsah webu nesmí být publikován bez souhlasu vlastníka licence nebo autora.<br> 
-            </div>
-
-            <div class="blank">
-
-            </div>     
-
+            Obsah webu nesmí být publikován bez souhlasu vlastníka licence nebo autora.<br> 
         </div>
 
-        <div class="go_top">
-            <a href="#top"><img border="0" src="pic/design/fixed_go_top.png" alt="go top - nahoru"></a>
-        </div>
+        <div class="blank">
 
-    </body>
+        </div>     
+
+    </div>
+
+    <div class="go_top">
+        <a href="#top"><img border="0" src="pic/design/fixed_go_top.png" alt="go top - nahoru"></a>
+    </div>
+
+</body>
 </html>

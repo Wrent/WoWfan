@@ -1,7 +1,6 @@
 <?php
-$article = new CArticle($database, $_GET["link"]);
+/* @var $article CArticle */
 ?>
-
 <div class="date">
     <div class="datetext">
         <span class="dm">
@@ -22,12 +21,12 @@ $article = new CArticle($database, $_GET["link"]);
 <div class="headers">
     <h1>
         <?php
-        echo $article->getNazev();
+        echo $article->getTitle();
         ?>
     </h1><br>
     napsal: 
     <?php
-    echo $article->getAutor();
+    echo $article->getAuthor();
     ?>
     v
     <?php
@@ -38,17 +37,17 @@ $article = new CArticle($database, $_GET["link"]);
     <br>
     <?php
     //TODO KEYWORDS
+    $article->printCategories();
     ?>
-    > <a href="#">Další datadisk</a> > <a href="#">Úvahy</a>
 </div>
 <div class="text">
     <?php
-    echo $article->getPopis();
+    echo $article->getDescription();
     ?>
 </div>
 <hr>
 <div class="text">
     <?php
-    echo $article->getText();
+    echo $article->getBBText();
     ?>
 </div>

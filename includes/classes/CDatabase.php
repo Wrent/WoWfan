@@ -5,15 +5,18 @@ class CDatabase {
     private $m_host;
     private $m_login;
     private $m_password;
+    /**
+     * @var CDatabase 
+     */
     private $m_database;
     private $m_connection;
 
-    /* !
+    /**
      * New object of Database just stores the data about the database.
-     * \param $host The adress of the database server.
-     * \param $login Login name of the database user.
-     * \param $password Password of the database user.
-     * \param $database Specifies the database to use. 
+     * @param $host The adress of the database server.
+     * @param $login Login name of the database user.
+     * @param $password Password of the database user.
+     * @param $database Specifies the database to use. 
      */
 
     public function __construct($host, $login, $password, $database) {
@@ -27,7 +30,7 @@ class CDatabase {
         mysql_close($this->m_connection);
     }
 
-    /* !
+    /**
      * Tries to establish new connection to the database.
      */
 
@@ -40,11 +43,11 @@ class CDatabase {
         mysql_select_db($this->m_database, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection)));
     }
 
-    /* !
+    /**
      * Inserts an item to the table and escapes them.
-     * \param $table The name of the table.
-     * \param $item Item to be added. It must be an array with keys named the same way like in the table.
-     * \param $forget_error If set to TRUE, possible errors will not be printed or handled.
+     * @param $table The name of the table.
+     * @param $item Item to be added. It must be an array with keys named the same way like in the table.
+     * @param $forget_error If set to TRUE, possible errors will not be printed or handled.
      */
 
     public function Insert($table, $item, $forget_error = FALSE) {
@@ -67,14 +70,14 @@ class CDatabase {
         else
             mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
     }
-    
-    /* !
+
+    /**
      * Updates an item in the table.
-     * \param $table The name of the table.
-     * \param $item Items to be updated. It must be an array with keys named the same way like in the table.
-     * \param $where Condition for update. It is also a key => value array sam as in the table.
-     * \param $logic If you want to change the logic of the condition, you can here, ig. OR.
-     * \param $forget_error If set to TRUE, possible errors will not be printed or handled.
+     * @param $table The name of the table.
+     * @param $item Items to be updated. It must be an array with keys named the same way like in the table.
+     * @param $where Condition for update. It is also a key => value array sam as in the table.
+     * @param $logic If you want to change the logic of the condition, you can here, ig. OR.
+     * @param $forget_error If set to TRUE, possible errors will not be printed or handled.
      */
 
     public function Update($table, $items, $where, $logic = "AND", $forget_error = FALSE) {
@@ -90,17 +93,17 @@ class CDatabase {
         }
 
         //composes the query
-        for ($i=0; $i < count($items); $i++) {
-            if($i > 0)
+        for ($i = 0; $i < count($items); $i++) {
+            if ($i > 0)
                 $query .= ", ";
-            $query .= $collumns[$i].'='.$values[$i];
+            $query .= $collumns[$i] . '=' . $values[$i];
         }
         if ($where != NULL) {
             $query .= " WHERE ";
             $i = 0;
             foreach ($where as $key => $value) {
                 if ($i > 0)
-                    $query .= " $logic ";
+                    $query .= " ".$this->Escape($logic)." ";
                 $query .= $this->Escape($key);
                 $query .= " = '";
                 $query .= $this->Escape($value);
@@ -116,11 +119,11 @@ class CDatabase {
             mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
     }
 
-    /* !
+    /**
      * Perfoms query with error handler.
-     * \param $query The query to use.
-     * \param $forget_error If set to TRUE, possible errors will not be printed or handled.
-     * \return Performed query object.
+     * @param $query The query to use.
+     * @param $forget_error If set to TRUE, possible errors will not be printed or handled.
+     * @return Performed query object.
      */
 
     public function Query($query, $forget_error = FALSE) {
@@ -132,37 +135,39 @@ class CDatabase {
         return $q;
     }
 
-    /* !
+    /**
      * Escapes the string for the safe use in the database.
-     * \param $string String to escape..
-     * \return Escaped string.
+     * @param $string String to escape..
+     * @return Escaped string.
      */
 
     public function Escape($string) {
         return mysql_real_escape_string($string, $this->m_connection);
     }
 
-    /* !
+    /**
      * Return the count of the field in the table.
-     * \param $table Table to use.
-     * \param $field Field to use.
-     * \return Count of the field.
+     * @param $table Table to use.
+     * @param $field Field to use.
+     * @return Count of the field.
      */
 
     public function Count($table, $field) {
+        $field = $this->Escape($field);
         $query = "SELECT COUNT($field) FROM $table;";
         $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
         return mysql_result($q, 0);
     }
 
-    /* !
+    /**
      * Selects single result from the field in the table using the where clausule.
-     * \param $table Table to use.
-     * \param $field Field to use.
-     * \param $where Array of the condition. Key represents field and value the value.
-     * \param $logic Can be changed to ig. OR.
-     * \return Single result or FALSE, if no result.
+     * @param $table Table to use.
+     * @param $field Field to use.
+     * @param $where Array of the condition. Key represents field and value the value.
+     * @param $logic Can be changed to ig. OR.
+     * @return Single result or FALSE, if no result.
      */
+
     public function SelectSingle($table, $field, $where = NULL, $logic = "AND") {
         $query = "SELECT $field FROM $table";
         if ($where != NULL) {
@@ -170,7 +175,7 @@ class CDatabase {
             $i = 0;
             foreach ($where as $key => $value) {
                 if ($i > 0)
-                    $query .= " $logic ";
+                    $query .= " ".$this->Escape($logic)." ";
                 $query .= $this->Escape($key);
                 $query .= " = '";
                 $query .= $this->Escape($value);
@@ -185,12 +190,52 @@ class CDatabase {
             return FALSE;
     }
 
+    /**
+     * Selects results from the field in the table using the where clausule.
+     * @param $table Table to use.
+     * @param $field Fields to use.
+     * @param $where Array of the condition. Key represents field and value the value.
+     * @param $logic Can be changed to ig. OR.
+     * @return Query result or FALSE, if no result.
+     */
+
+    public function Select($table, $fields, $where = NULL, $logic = "AND") {
+        $query = "SELECT ";
+
+        $i = 0;
+        foreach ($fields AS $field) {
+            if ($i > 0)
+                $query .= ", ";
+            $query .= $this->Escape($field);
+        }
+
+        $query .= " FROM $table";
+        if ($where != NULL) {
+            $query .= " WHERE ";
+            $i = 0;
+            foreach ($where as $key => $value) {
+                if ($i > 0)
+                    $query .= " ".$this->Escape($logic)." ";
+                $query .= $this->Escape($key);
+                $query .= " = '";
+                $query .= $this->Escape($value);
+                $query .= "'";
+                $i++;
+            }
+        }
+        $q = mysql_query($query, $this->m_connection) or die($this->ThrowError(mysql_error($this->m_connection), $query));
+        if (mysql_num_rows($q) > 0)
+            return $q;
+        else
+            return FALSE;
+    }
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
-    /* !
+    /**
      * Handler for the database errors, it will print the error and tries to save it to the logs table
-     * \param $error Error message from the database.
-     * \param $query Contains the query, where error was thrown.
+     * @param $error Error message from the database.
+     * @param $query Contains the query, where error was thrown.
      */
 
     private function ThrowError($error, $query = "") {
@@ -201,11 +246,11 @@ class CDatabase {
         if ($query != "")
             echo "Původní dotaz: " . $query . "<br><br>";
 
-        $errorLog = array('msg' => $error . " - " . $query);
+        $errorLog = $error . " - " . $query;
 
         //TO DO TO DO TO DO TO DO TO DO
         //this insert will not be logged, if it failes, it can cause a recursive deadlock
-        $this->Insert("error_log", $errorLog, TRUE);
+        $this->Insert("error_log", $this->Escape($errorLog), TRUE);
     }
 
 }
