@@ -26,7 +26,7 @@
     </h1><br>
     napsal: 
     <?php
-    echo $article->getAuthor();
+    echo $article->printAuthors();
     ?>
     v
     <?php
@@ -42,7 +42,7 @@
 </div>
 <div class="text">
     <?php
-    echo $article->getDescription();
+    echo $article->getBBDescription();
     ?>
 </div>
 <hr>

@@ -2,8 +2,9 @@
 
 require_once 'includes/classes/CDatabase.php';
 require_once 'includes/classes/CCategory.php';
-require 'includes/functions/bbcode.php';
-
+require_once 'includes/classes/CUser.php';
+require_once 'includes/functions/bbcode.php';
+require_once 'includes/functions/isNullOrEmptyString.php';
 
 class CArticle {
 
@@ -22,7 +23,11 @@ class CArticle {
     private $m_source;
     private $m_type;
     // ----------------OBJECT VARIABLES----------------------------
+    /**
+     * @var SplObjectStorage
+     */
     private $m_authors;
+
     /**
      * @var SplObjectStorage
      */
@@ -30,6 +35,7 @@ class CArticle {
     // ----------------OTHER VARIABLES-----------------------------
     private $m_array;
     private $m_newArticle;
+
     /**
      * @var CDatabase
      */
@@ -49,6 +55,7 @@ class CArticle {
         $this->m_id = $id;
 
         $this->m_categories = new SplObjectStorage();
+        $this->m_authors = new SplObjectStorage();
 
         //is this new or existing article?
         if (!isset($link) AND !isset($id)) {
@@ -101,37 +108,98 @@ class CArticle {
         $q = $database->Query("SELECT id FROM category AS c JOIN being_in_category AS b ON 
             (c.id = b.id_category) WHERE b.id_article = $this->m_id;");
 
-
         while ($r = mysql_fetch_array($q)) {
-            $this->m_categories->attach(new CCategory($database, $r['id']));
+            $this->addCategory(new CCategory($database, $r['id']));
         }
 
 
-        $this->m_authors = $authors;
+        //select all authors
+        $q = $database->Query("SELECT id FROM user AS u JOIN authorship AS a ON 
+            (u.id = a.id_user) WHERE a.id_article = $this->m_id;");
+
+        while ($r = mysql_fetch_array($q)) {
+            $this->addAuthor(new CUser($database, NULL, $r['id']));
+        }
     }
 
     /**
      * Saves the article to the databaze.
      */
-
     public function save() {
+        $not_null_variables = array(
+            $this->m_link,
+            $this->m_text,
+            $this->m_title,
+            $this->m_type,
+            $this->m_time,
+        );
+        foreach ($not_null_variables AS $item) {
+            if (IsNullOrEmptyString($item))
+                return false;
+        }
+
+        if (IsNullOrEmptyString($this->m_description) && $this->m_type != "N")
+            return false;
+
+
         $this->getVariablesToArray();
+        //save article itself
         if ($this->m_newArticle) {
             $this->m_database->Insert(self::TABLE, $this->m_array);
         } else {
             $where = array('id' => $this->m_id);
             $this->m_database->Update(self::TABLE, $this->m_array, $where);
         }
+        //delete all categories
+        $where = array("id_article" => $this->m_id);
+        $this->m_database->Delete("being_in_category", $where);
+
+        //insert new categories
+        foreach ($this->m_categories as $category) {
+            $data = array(
+                'id_article' => $this->m_id,
+                'id_category' => $category->getId(),
+            );
+            $this->m_database->Insert("being_in_category", $data);
+        }
+        return TRUE;
     }
 
     public function addCategory(CCategory $category) {
-        $this->m_categories->attach($category);
+        if (!$this->m_categories->contains($category)) {
+            $this->m_categories->attach($category);
+            return TRUE;
+        }
+        else
+            return FALSE;
     }
 
     public function removeCategory(CCategory $category) {
-        $this->m_categories->detach($category);
+        if ($this->m_categories->contains($category)) {
+            $this->m_categories->detach($category);
+        } else {
+            return FALSE;
+        }
     }
-    
+
+    public function addAuthor(CUser $author) {
+        if (!$this->m_authors->contains($author)) {
+            $this->m_authors->attach($author);
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
+
+    public function removeAuthor(CUser $author) {
+        if (!$this->m_authors->contains($author)) {
+            $this->m_authors->attach($author);
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     //getters and setters
@@ -140,7 +208,15 @@ class CArticle {
     }
 
     public function setLink($link) {
-        $this->m_link = $link;
+        if (IsNullOrEmptyString($link))
+            return FALSE;
+        $where = array('link' => $link,);
+        if ($this->m_database->Count(self::TABLE, 'link', $where) == 0) {
+            $this->m_link = $link;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 
     public function getTitle() {
@@ -148,6 +224,8 @@ class CArticle {
     }
 
     public function setTitle($title) {
+        if (IsNullOrEmptyString($title))
+            return FALSE;
         $this->m_title = $title;
     }
 
@@ -155,24 +233,56 @@ class CArticle {
         return $this->m_description;
     }
 
+    public function getBBDescription() {
+        if ($this->m_auto_spacing)
+            $text = str_replace('\n', '<br>\n', $this->m_description);
+        else
+            $text = $this->m_description;
+        return bbcode($text);
+    }
+
     public function setDescription($description) {
+        if (IsNullOrEmptyString($description) && $this->m_type != "N")
+            return FALSE;
         $this->m_description = $description;
     }
 
     public function getText() {
         return $this->m_text;
     }
-    
+
     public function getBBText() {
-        return bbcode($this->m_text);
+        if ($this->m_auto_spacing)
+            $text = str_replace('\n', '<br>\n', $this->m_text);
+        else
+            $text = $this->m_text;
+        return bbcode($text);
     }
 
     public function setText($text) {
+        if (IsNullOrEmptyString($text))
+            return FALSE;
         $this->m_text = $text;
     }
 
     public function setTime($time) {
+        if (!is_numeric($time))
+            return FALSE;
         $this->m_time = $time;
+        return TRUE;
+    }
+
+    public function getType() {
+        return $this->m_type;
+    }
+
+    public function setType($type) {
+        if ($type == "C" || $type == "U" || $type == "N") {
+            $this->m_type = $type;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 
     public function getTime() {
@@ -202,7 +312,7 @@ class CArticle {
     public function getCategories() {
         return $this->m_categories;
     }
-    
+
     public function printCategories() {
         foreach ($this->m_categories as $category) {
             echo "> ";
@@ -210,20 +320,32 @@ class CArticle {
         }
     }
 
-    public function getAuthor() {
-        /*if (!empty($this->m_autor)) {
-            $q = $this->m_database->Query("SELECT nick FROM users WHERE nick = '" . $this->m_autor . "';");
-            if (mysql_num_rows($q) > 0) {
-                $nick = $this->m_autor;
-                return '<a href="profily/' . $nick . '/" title="Profil uživatele ' . $nick . '">' . $nick . '</a>';
+    public function getAuthors() {
+        return $this->m_authors;
+    }
+
+    public function printAuthors($links = TRUE) {
+        $i = 0;
+        /* @var $author CUser */
+        foreach ($this->m_authors as $author) {
+            if ($i > 0)
+                echo ", ";
+            if ($links)
+                echo "<a href='profily/" . $author->getNick() . "/'>";
+
+            echo $author->getNick();
+
+            if ($author->getName() || $author->getSurname()) {
+                echo "(";
+                echo $author->getName() . " ";
+                echo $author->getSurname();
+                echo ")";
             }
-            else
-                return $this->m_autor;
-        } else {
-            $q = $this->m_database->Query("SELECT nick FROM users WHERE id = '" . $this->m_id_autor . "';");
-            $nick = mysql_result($q, 0);
-            return '<a href="profily/' . $nick . '/" title="Profil uživatele ' . $nick . '">' . $nick . '</a>';
-        }*/
+            if ($links)
+                echo "</a>";
+
+            $i++;
+        }
     }
 
     /* ----------------------------------------------------------------------------------------------------------------- */
@@ -231,12 +353,10 @@ class CArticle {
     /**
      * Gets variables of Article to an array suitable for mysql insert.
      */
-
     private function getVariablesToArray() {
         $this->m_array = array(
             'link' => $this->m_link,
             'title' => $this->m_title,
-            'id' => $this->m_id,
             'description' => $this->m_description,
             'text' => $this->m_text,
             'views' => $this->m_views,
@@ -252,6 +372,9 @@ class CArticle {
 
 }
 
-class NotFoundException extends Exception {};
+class NotFoundException extends Exception {
+    
+}
 
+;
 ?>

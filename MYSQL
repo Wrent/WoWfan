@@ -30,6 +30,7 @@ CREATE TABLE `article` (
   `rating_now` FLOAT NOT NULL,
   `source` MEDIUMTEXT NULL DEFAULT NULL,
   `type` VARCHAR(1) NOT NULL,
+  `published` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
 KEY (`title`),
   UNIQUE KEY (`link`, `type`),
@@ -56,12 +57,14 @@ CREATE TABLE `user` (
   `url` VARCHAR(400) NULL DEFAULT NULL,
   `activated` TINYINT NOT NULL DEFAULT 0,
   `warnings` INT NOT NULL DEFAULT 0,
-  `last_warned` INT NULL DEFAULT NULL,
-  `newsletter` TINYINT NOT NULL,
+  `last_warned` INT NOT NULL DEFAULT 0,
+  `newsletter` TINYINT NOT NULL DEFAULT 1,
   `info` MEDIUMTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
 KEY (`nick`),
-KEY (`email`)
+KEY (`email`),
+  UNIQUE KEY (`nick`),
+  UNIQUE KEY (`email`)
 );
 
 -- ---
@@ -160,7 +163,8 @@ CREATE TABLE `category` (
   `id` INT NOT NULL,
   `title` VARCHAR(250) NOT NULL,
   PRIMARY KEY (`id`),
-KEY (`title`)
+KEY (`title`),
+  UNIQUE KEY (`title`)
 );
 
 -- ---
@@ -209,7 +213,8 @@ CREATE TABLE `menu` (
   `position` INT NOT NULL DEFAULT 0,
   `link` VARCHAR(250) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-KEY (`position`)
+KEY (`position`),
+  UNIQUE KEY (`title`)
 );
 
 -- ---
@@ -315,8 +320,8 @@ ALTER TABLE `rank_list` ADD FOREIGN KEY (id_rank) REFERENCES `rank` (`id`);
 -- Test Data
 -- ---
 
--- INSERT INTO `article` (`id`,`title`,`description`,`text`,`time`,`views`,`link`,`auto_spacing`,`comments_cnt`,`rating`,`rating_now`,`source`,`type`) VALUES
--- ('','','','','','','','','','','','','');
+-- INSERT INTO `article` (`id`,`title`,`description`,`text`,`time`,`views`,`link`,`auto_spacing`,`comments_cnt`,`rating`,`rating_now`,`source`,`type`,`published`) VALUES
+-- ('','','','','','','','','','','','','','');
 -- INSERT INTO `user` (`id`,`nick`,`password`,`name`,`surname`,`residence`,`email`,`icq`,`skype`,`url`,`activated`,`warnings`,`last_warned`,`newsletter`,`info`) VALUES
 -- ('','','','','','','','','','','','','','','');
 -- INSERT INTO `authorship` (`id_user`,`id_article`) VALUES
