@@ -1,6 +1,7 @@
 <?php
 
 require_once 'includes/classes/CDatabase.php';
+require_once 'includes/classes/CNotFoundException.php';
 
 class CUser {
 
@@ -36,7 +37,7 @@ class CUser {
     public function __construct($database, $nick = NULL, $id = NULL) {
         $this->m_id = $id;
         $this->m_nick = $nick;
-        
+
 
         //is this new or existing article?
         if (!isset($nick) && !isset($id)) {
@@ -46,8 +47,23 @@ class CUser {
         else
             $this->m_newUser = false;
 
-        $id = $database->Escape($id);
-        $q = $database->Query("SELECT * FROM " . self::TABLE . " WHERE id = '$id';");
+        if (isset($nick)) {
+            $fields = array("*",);
+            $where = array(
+                "nick" => $nick,
+            );
+            $q = $database->Select(self::TABLE, $fields, $where);
+        } else {
+            $fields = array("*",);
+            $where = array(
+                "id" => $id,
+            );
+            $q = $database->Select(self::TABLE, $fields, $where);
+        }
+
+        if (!$q) {
+            throw new NotFoundException();
+        }
 
 
         $user = mysql_fetch_array($q);
@@ -55,27 +71,39 @@ class CUser {
 
         $this->m_id = $user["id"];
         $this->m_nick = $user["nick"];
+        $this->m_password = $user["password"];
+        $this->m_name = $user["name"];
+        $this->m_surname = $user["surname"];
+        $this->m_residence = $user["residence"];
+        $this->m_email = $user["email"];
+        $this->m_icq = $user["icq"];
+        $this->m_skype = $user["skype"];
+        $this->m_url = $user["url"];
+        $this->m_activated = $user["activated"];
+        $this->m_warnings = $user["warnings"];
+        $this->m_last_warned = $user["last_warned"];
+        $this->m_newsletter = $user["newsletter"];
+        $this->m_info = $user["info"];
 
         $this->m_array = $user;
 
         $this->m_database = $database;
     }
 
-    /* !
+    /**
      * Saves the user to the databaze.
      */
-
     public function save() {
-         $not_null_variables = array(
+        $not_null_variables = array(
             $this->m_nick,
             $this->m_email,
         );
         foreach ($not_null_variables AS $item) {
             if (IsNullOrEmptyString($item))
-                return false;
+                return TRUE;
         }
-        
-        
+
+
         $this->getVariablesToArray();
         if ($this->m_newUser) {
             $this->m_database->Insert(self::TABLE, $this->m_array);
@@ -83,12 +111,19 @@ class CUser {
             $where = array('id' => $this->m_id);
             $this->m_database->Update(self::TABLE, $this->m_array, $where);
         }
+        return TRUE;
     }
 
     /* ----------------------------------------------------------------------------------------------------------------- */
 
-    public function getNick() {
-        return $this->m_nick;
+    public function getNick($link = TRUE) {
+        if ($link)
+            echo "<a href='profily/" . $this->m_nick . "/'>";
+
+        echo $this->m_nick;
+
+        if ($link)
+            echo "</a>";
     }
 
     public function setNick($nick) {
@@ -128,6 +163,22 @@ class CUser {
 
     public function setSurname($surname) {
         $this->m_surname = $surname;
+    }
+
+    public function getFullName($link = TRUE) {
+        if ($link)
+            echo "<a href='profily/" . $this->m_nick . "/'>";
+
+        echo $this->m_nick;
+
+        if ($this->m_name || $this->m_surname) {
+            echo " (";
+            echo $this->m_name . " ";
+            echo $this->m_surname;
+            echo ")";
+        }
+        if ($link)
+            echo "</a>";
     }
 
     public function getResidence() {

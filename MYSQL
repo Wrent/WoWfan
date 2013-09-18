@@ -147,6 +147,8 @@ CREATE TABLE `comment` (
   `id_user` INT NULL DEFAULT NULL,
   `text` MEDIUMTEXT NOT NULL,
   `time` BIGINT NOT NULL,
+  `score` INT NOT NULL DEFAULT 0,
+  `reply_to` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
 KEY (`id_user`),
 KEY (`id_article`)
@@ -334,8 +336,8 @@ ALTER TABLE `rank_list` ADD FOREIGN KEY (id_rank) REFERENCES `rank` (`id`);
 -- ('','');
 -- INSERT INTO `ip_usage` (`id_ip`,`id_user`) VALUES
 -- ('','');
--- INSERT INTO `comment` (`id`,`id_article`,`id_user`,`text`,`time`) VALUES
--- ('','','','','');
+-- INSERT INTO `comment` (`id`,`id_article`,`id_user`,`text`,`time`,`score`,`reply_to`) VALUES
+-- ('','','','','','','');
 -- INSERT INTO `category` (`id`,`title`) VALUES
 -- ('','');
 -- INSERT INTO `highlight` (`id`,`position`,`pic_big`,`link`,`id_user`,`visible`) VALUES

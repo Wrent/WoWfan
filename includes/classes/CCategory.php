@@ -1,4 +1,5 @@
 <?php
+
 require_once 'includes/classes/CDatabase.php';
 
 class CCategory {
@@ -18,7 +19,6 @@ class CCategory {
      * @param $database Link to the database object, where the category will be stored.
      * @param $id Unique id of the category, can be NULL (if creating new category)
      */
-
     public function __construct($database, $id = NULL) {
         $this->m_id = $id;
 
@@ -30,8 +30,11 @@ class CCategory {
         else
             $this->m_newCategory = false;
 
-        $id = $database->Escape($id);
-        $q = $database->Query("SELECT * FROM " . self::TABLE . " WHERE id = '$id';");
+        $fields = array("*",);
+        $where = array(
+            "id" => $id,
+        );
+        $q = $database->Select(self::TABLE, $fields, $where);
 
 
         $category = mysql_fetch_array($q);
@@ -48,7 +51,6 @@ class CCategory {
     /**
      * Saves the category to the databaze.
      */
-
     public function save() {
         $not_null_variables = array(
             $this->m_title,
@@ -57,7 +59,7 @@ class CCategory {
             if (IsNullOrEmptyString($item))
                 return FALSE;
         }
-        
+
         $this->getVariablesToArray();
         if ($this->m_newCategory) {
             $this->m_database->Insert(self::TABLE, $this->m_array);
@@ -67,12 +69,13 @@ class CCategory {
         }
         return TRUE;
     }
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     public function getTitle() {
         return $this->m_title;
     }
-    
+
     public function setTitle($title) {
         if (IsNullOrEmptyString($title))
             return FALSE;
@@ -84,7 +87,7 @@ class CCategory {
             return FALSE;
         }
     }
-    
+
     public function getId() {
         return $this->m_id;
     }
@@ -94,7 +97,6 @@ class CCategory {
     /**
      * Gets variables of category to an array suitable for mysql insert.
      */
-
     private function getVariablesToArray() {
         $this->m_array = array(
             'title' => $this->m_title,

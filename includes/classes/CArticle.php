@@ -3,6 +3,8 @@
 require_once 'includes/classes/CDatabase.php';
 require_once 'includes/classes/CCategory.php';
 require_once 'includes/classes/CUser.php';
+require_once 'includes/classes/CNotFoundException.php';
+require_once 'includes/classes/CComment.php';
 require_once 'includes/functions/bbcode.php';
 require_once 'includes/functions/isNullOrEmptyString.php';
 
@@ -22,6 +24,7 @@ class CArticle {
     private $m_rating_now;
     private $m_source;
     private $m_type;
+    private $m_published;
     // ----------------OBJECT VARIABLES----------------------------
     /**
      * @var SplObjectStorage
@@ -99,6 +102,7 @@ class CArticle {
         $this->m_rating_now = $article["rating_now"];
         $this->m_source = $article["source"];
         $this->m_type = $article["type"];
+        $this->m_published = $article["published"];
 
         $this->m_array = $article;
 
@@ -118,7 +122,12 @@ class CArticle {
             (u.id = a.id_user) WHERE a.id_article = $this->m_id;");
 
         while ($r = mysql_fetch_array($q)) {
-            $this->addAuthor(new CUser($database, NULL, $r['id']));
+            try {
+                $this->addAuthor(new CUser($database, NULL, $r['id']));
+            } catch (NotFoundException $e) {
+                //database should be consistent, so we almost dont care
+                break;
+            }
         }
     }
 
@@ -198,6 +207,81 @@ class CArticle {
         }
         else
             return FALSE;
+    }
+
+    /**
+     * Prints the BEST comment.
+     */
+    public function printBestComment() {
+        $id = $this->m_database->Escape($this->m_id);
+
+        $q = $this->m_database->Query('SELECT id FROM comment WHERE id_article = ' .
+                $id . ' ORDER BY score LIMIT 1, 1;');
+        if (mysql_num_rows($q) > 0) {
+            $r = mysql_result($q, 0);
+
+            $comment = new CComment($this->m_database, $r);
+
+            echo $comment->getAuthor()->getNick() . ": ";
+            echo "<a>";
+            echo $comment->getText();
+            echo "</a>";
+            echo "<em>" . date('d.m.y H:i', $comment->getTime()) . "</em>";
+
+
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
+
+    /**
+     * Prints few of the BEST comments and then few of the last comments.
+     */
+    public function printComments($best = 1, $last = 5) {
+        $id = $this->m_database->Escape($this->m_id);
+
+        $q = $this->m_database->Query('SELECT id FROM comment WHERE id_article = ' .
+                $id . ' ORDER BY score LIMIT 0, '.$best.';');
+        if (mysql_num_rows($q) > 0) {
+            $r = mysql_result($q, 0);
+
+            $comment = new CComment($this->m_database, $r);
+
+            echo $comment->getAuthor()->getNick() . ": ";
+            echo "<a>";
+            echo $comment->getBBText();
+            echo "</a>";
+            echo "<em>" . date('d.m.y H:i', $comment->getTime()) . "</em>";
+
+            echo "<hr>";
+            $q = $this->m_database->Query('SELECT id FROM comment WHERE id_article = ' .
+                $id . ' ORDER BY time DESC LIMIT 0, '.$last.';');
+            
+            while ($r = mysql_fetch_array($q)) {
+                $comment = new CComment($this->m_database, $r["id"]);
+
+            echo $comment->getAuthor()->getNick() . ": ";
+            echo $comment->getBBText();
+            echo "<br>";
+            echo "<em>" . date('d.m.y H:i', $comment->getTime()) . "</em>";
+            echo "score: ";
+            echo $comment->getScore();
+            echo " | +1 | -1";
+            echo "<hr>";
+            }
+
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
+
+    /**
+     * Prints all comments, from newest to oldest.
+     */
+    public function printAllComments($page) {
+        
     }
 
     /* ----------------------------------------------------------------------------------------------------------------- */
@@ -324,25 +408,13 @@ class CArticle {
         return $this->m_authors;
     }
 
-    public function printAuthors($links = TRUE) {
+    public function printAuthors($link = TRUE) {
         $i = 0;
         /* @var $author CUser */
         foreach ($this->m_authors as $author) {
             if ($i > 0)
                 echo ", ";
-            if ($links)
-                echo "<a href='profily/" . $author->getNick() . "/'>";
-
-            echo $author->getNick();
-
-            if ($author->getName() || $author->getSurname()) {
-                echo "(";
-                echo $author->getName() . " ";
-                echo $author->getSurname();
-                echo ")";
-            }
-            if ($links)
-                echo "</a>";
+            echo $author->getFullName($link);
 
             $i++;
         }
@@ -367,14 +439,10 @@ class CArticle {
             'rating_now' => $this->m_rating_now,
             'source' => $this->m_source,
             'type' => $this->m_type,
+            'published' => $this->m_published,
         );
     }
 
 }
 
-class NotFoundException extends Exception {
-    
-}
-
-;
 ?>

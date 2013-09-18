@@ -50,4 +50,10 @@
     <?php
     echo $article->getBBText();
     ?>
+    
+    <h3>Nejlepší Komentáře</h3>
+    <?php
+    $article->printBestComment();
+    $article->printComments($_GET['page']);
+    ?>
 </div>
